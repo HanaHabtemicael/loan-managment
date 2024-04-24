@@ -65,8 +65,8 @@ const Header = () =>{
   return <Fragment>
   <div className={classes.headerNav+' d-flex px-3 px-lg-5 py-2 align-items-center'}>
        <div>
-        <span className={classes.yellowText+' fw-bold fs-4'}>RENSYS</span>
-        <span className={classes.greenText+' fw-bold fs-4'}>ENGINEERING</span>
+        <span className={classes.yellowText+' fw-bold fs-4'}>HEBRET</span>
+        <span className={classes.greenText+' fw-bold fs-4'}>bank</span>
        </div>
       {
     //      <div className='ms-auto me-3'>
