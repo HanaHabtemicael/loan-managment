@@ -1,7 +1,7 @@
 a.active{
     background-color: #062539;
     text-decoration: none;
-    color: #FF7e00; 
+    color: white; 
     font-family: 'Mulish', sans-serif;
     font-weight: bold;
     font-size: large;
@@ -10,7 +10,7 @@ a.active{
 }
 .inactive{
     text-decoration: none;
-    color: black; 
+    color: white; 
    font-family: 'Mulish', sans-serif;
    font-weight: bold;
    font-size: large;

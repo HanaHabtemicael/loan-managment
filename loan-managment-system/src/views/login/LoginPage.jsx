@@ -6,7 +6,7 @@ import axios from 'axios';
 import apiClient from '../../url/index';
 import classNamees from './LoginPage.module.css';
 import hibretlogo from '../../assets/hibretlogo.png';
-import emoje from '../../assets/emoje.avif';
+import emoje from '../../assets/emoji.png';
 import Cookies from 'js-cookie';
 
 const LoginPage = () => {
@@ -24,6 +24,7 @@ const LoginPage = () => {
   const saveUserData = (accessToken) => {
     apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
     localStorage.setItem('token', accessToken);
+    //Cookies.set('access_token', accessToken); // Save access token as a cookie
     dispatch(userAction.setToken(accessToken));
     dispatch(userAction.setIsAuthenticated(true));
   };
@@ -46,16 +47,18 @@ const LoginPage = () => {
     e.preventDefault();
     console.log('cre', credentials);
 
-    try{
-      var response = await apiClient.post('api/v1/auth/login',credentials)
+    try {
+      var response = await apiClient.post('api/v1/auth/login', credentials)
 
-      console.log('cr', credentials);
-      console.log('res', response);
 
+console.log("res",response)
       if (response.status === 200) {
-        const accessToken = getCookieValue('access_token');
-        saveUserData(accessToken);
-        console.log('Access Token:', accessToken);
+       // const accessToken = getCookieValue('access_token');
+      //  console.log(accessToken)
+        
+       // saveUserData(accessToken);
+      //  console.log('Access Token:', accessToken);
+        navigate('/home')
       } else {
         console.log('Error response');
       }
@@ -64,78 +67,77 @@ const LoginPage = () => {
     }
   };
 
-     return(
-      <div className="flex items-center w-full h-screen p-4 lg:justify-center">
-        <div
-       className="flex flex-col overflow-hnameden  bg-violet  rounded-md shadow-lg max md:flex-row md:flex-1 lg:flex-1"
-        >
-       
-       <div className=" pt-3 text-white h-screen bg-gradient-to-b from-ad to-ab md:w-100 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly">
-         
-         
-         <img className="px-10" src={hibretlogo} alt="hibret logo" height={20}/>
-         
-         <p className=" text-sm text-center font-bold text-gray-300 absolute bottom-0 pb-4">
-          powered by lersha
-         </p>
-       </div>
-       <div className="p-4 lg:w-1/3 mx-auto my-20 md:w-1/4 bg-white flex flex-col justify-center">
-  <div className="flex flex-row w-full items-baseline h-18 ">
-    <h3 className="text-2xl font-semibold text-gray-700 flex items-start h-full">Welcome</h3>
-    <img className="w-6 md:w-18 lg:w-20 h-19 pt-4" src={emoje} alt="hello" />
-  </div>
-         <form className="flex flex-col space-y-5">
-           <div className="flex flex-col space-y-1">
-             <label  className="text-sm  text-gray-500 flex items-start">Sign in to your account</label>
-             <label  className="text-sm pt-3 text-gray-500 flex items-start">email</label>
-             <input
-               type="email"
-               name="email"
-               value={credentials.email}
+  return (
+    <div className="flex items-center w-full h-screen p-4 lg:justify-center">
+      <div
+        className="flex flex-col overflow-hnameden  bg-violet  rounded-md shadow-lg max md:flex-row md:flex-1 lg:flex-1"
+      >
 
-               onChange={changeHandler}
+        <div className=" pt-3 text-white h-screen bg-gradient-to-b from-ad to-ab md:w-100 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly">
 
-               autoFocus
-               className="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
-             />
-           </div>
-           <div className="flex flex-col space-y-1">
-             <div className="flex items-center justify-between">
-               <label  className="text-sm  text-gray-500">Password</label>
-               <a href="#" className="text-sm  hover:underline focus:text-blue-800">Forgot Password?</a>
-             </div>
-             <input
-               type="password"
-               name="password"
-               value={credentials.password}
 
-               onChange={changeHandler}
+          <img className="px-10" src={hibretlogo} alt="hibret logo" height={20} />
 
-               className="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
-             />
-           </div>
-           <div className="flex items-center space-x-2">
-             <input
-               type="checkbox"
-               name="remember"
+          <p className=" text-sm text-center font-bold text-gray-300 absolute bottom-0 pb-4">
+            powered by lersha
+          </p>
+        </div>
+        <div className="p-4 lg:w-1/3 mx-auto my-20 md:w-1/4 bg-white flex flex-col justify-center rounded-md">
+          <div className="flex flex-row w-full items-baseline h-14">
+            <h3 className="text-2xl font-semibold text-gray-700 flex items-start h-full">Welcome</h3>
+          </div>
+          <form className="flex flex-col space-y-5"> 
+            <div className="flex flex-col space-y-1">
+              <label className="text-sm  text-gray-500 flex items-start">Sign in to your account</label>
+              <label className="text-sm pt-3 text-gray-500 flex items-start">email</label>
+              <input
+                type="email"
+                name="email"
+                value={credentials.email}
 
-               className="w-4 h-4 transition duration-300 rounded focus:ring-2 focus:ring-offset-0 focus:outline-none focus:ring-blue-200"
-             />
-             <label  className="text-sm font-semibold text-gray-500">Remember me</label>
-           </div>
-           <div>
-             <button
-               type="submit"
-               className="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-gradient-to-b from-ad to-ab md:w-90 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
-               onClick={handleLogin}>
-               Sign in
-             </button>
-           </div>
-           
-         </form>
-       </div>
-     </div>
-   </div>
-     )
+                onChange={changeHandler}
+
+                autoFocus
+                className="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
+              />
+            </div>
+            <div className="flex flex-col space-y-1">
+              <div className="flex items-center justify-between">
+                <label className="text-sm  text-gray-500">Password</label>
+                <a href="#" className="text-sm  hover:underline focus:text-blue-800">Forgot Password?</a>
+              </div>
+              <input
+                type="password"
+                name="password"
+                value={credentials.password}
+
+                onChange={changeHandler}
+
+                className="px-4 py-2 transition duration-300 border border-gray-300 rounded focus:border-transparent focus:outline-none focus:ring-4 focus:ring-blue-200"
+              />
+            </div>
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                name="remember"
+
+                className="w-4 h-4 transition duration-300 rounded focus:ring-2 focus:ring-offset-0 focus:outline-none focus:ring-blue-200"
+              />
+              <label className="text-sm font-semibold text-gray-500">Remember me</label>
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-gradient-to-b from-ad to-ab md:w-90 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
+                onClick={handleLogin}>
+                Sign in
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  )
 }
 export default LoginPage

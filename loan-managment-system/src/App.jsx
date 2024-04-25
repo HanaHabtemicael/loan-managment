@@ -15,11 +15,12 @@ function App() {
   
   useEffect(() => {
     const checkCookie = () => {
+      console.log("chkin ck");
       const cookieValue = document.cookie
         .split('; ')
         .find(row => row.startsWith('access_token='))
         ?.split('=')[1]; 
-
+      console.log("gf-irr------------",cookieValue)
       if (!cookieValue) {
         navigate('/login'); 
       }

@@ -63,7 +63,7 @@ const Header = () =>{
     setShowEditName(false)
   }
   return <Fragment>
-  <div className={classes.headerNav+' d-flex px-3 px-lg-5 py-2 align-items-center'}>
+  <div className={classes.headerNav+' mt-3  rounded-md d-flex  px-3 px-lg-5 '}>
        <div>
         <span className={classes.yellowText+' fw-bold fs-4'}>HEBRET</span>
         <span className={classes.greenText+' fw-bold fs-4'}>bank</span>
@@ -77,7 +77,7 @@ const Header = () =>{
     // </button>       
     //    </div>
       }
-      <div className='border rounded pe-2 ms-auto'>
+      <div className=''>
       {/* <Dropdown>
         <Dropdown.Toggle className={classes.dropDown+' d-flex align-items-center'} id="profile-dropdown">
         <div className='d-flex overflow-hidden ms-2 align-items-center'>

@@ -9,18 +9,18 @@ const AppContainer = () =>{
   const isLoading = useSelector((state=>state.loading.isLoading))
   
     return <Fragment>
-        <Header />
-        <div className='d-flex'>
-         <div className='sideBar'>
+         <div className='flex flex-row'>
          <SideBar />
+         <Header/>
          </div>
-        <div className='flex-fill px-3 px-lg-5 py-4 mb-4 position-relative'>  
+        
+        <div className=''>  
         {
           isLoading && (<Spiner /> )
         }    
         <Outlet />
         </div>
-         </div>
+         
        </Fragment>
 }
 export default AppContainer
