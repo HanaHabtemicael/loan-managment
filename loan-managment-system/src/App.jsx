@@ -6,6 +6,7 @@ import apiClient from './url/index';
 import Router from './routes';
 import { userAction } from './store/slices/UserSlice';
 import './App.css';
+import Cookies from 'js-cookie'; 
 
 function App() {
   
@@ -13,13 +14,18 @@ function App() {
   const dispatch = useDispatch()
   
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token');
-    if (accessToken) {
-      dispatch(userAction.setToken(accessToken));
-      apiClient.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-    } else {
-      navigate('/home');
-    }
+    const checkCookie = () => {
+      const cookieValue = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('access_token='))
+        ?.split('=')[1]; 
+
+      if (!cookieValue) {
+        navigate('/login'); 
+      }
+    };
+
+    checkCookie();
   }, []);
   
   return (<Router />);

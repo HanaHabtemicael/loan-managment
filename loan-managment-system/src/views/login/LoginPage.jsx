@@ -1,10 +1,5 @@
-import {useState} from 'react'
-//import form from 'react-bootstrap/form';
-//import button from 'react-bootstrap/button'
-//mport Spinner from "react-bootstrap/Spinner";
-import { useSelector,useDispatch } from "react-redux";
-import { Link } from 'react-router-dom';
-import {buttonAction} from '../../store/slices/ButtonSpinerSlice.jsx'
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { userAction } from '../../store/slices/UserSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -12,116 +7,68 @@ import apiClient from '../../url/index';
 import classNamees from './LoginPage.module.css';
 import hibretlogo from '../../assets/hibretlogo.png';
 import emoje from '../../assets/emoje.avif';
+import Cookies from 'js-cookie';
 
+const LoginPage = () => {
+  const [credentials, setCredentials] = useState({ email: '', password: '' });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    setCredentials((prevValues) => {
+      return { ...prevValues, [name]: value };
+    });
+  };
 
-const LoginPage = () =>{
-    const isLoading = useSelector((state) => state.btn.isLoading);
-    const [credentials, setCredentials] = useState({ email: '', password: '' });
-    const [errors,setErrors] = useState({email:'',password:'',errNotify:''})
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-        const changeHandler = (e) =>{
-           const {name,value} = e.target
-           setCredentials(prevValues=>{
-               return {...prevValues,[name]:value}
-           })
-           if(e.target.value){
-            setErrors(prevErrors=>{
-                return {...prevErrors,[name]:''}
-            })
-           }
-        }
-        const validate = (values) =>{
-           const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
-         const errorValues ={}
-         if(!values.email.trim()){
-           errorValues.email = 'email is required'
-         }
-         else if(!regexExp.test(values.email)){
-          errorValues.email = 'invalid email address'
-        }
-        
-         if(!values.password){
-           errorValues.password ='password is required'
-         }
-         else if(values.length > 15){
-           errorValues.password = 'password must not be greater than 15 characters'
-         }
-         return errorValues
-        } 
-        
-        const saveUserData = (accessToken) => {
-          apiClient.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-          localStorage.setItem("token", accessToken);
-          dispatch(userAction.setToken(accessToken));
-          dispatch(userAction.setIsAuthenticated(true));
-      };
-      
-      // const loginHandler = async () => {
-      //   setErrors(validate(credentials));
-      
-      //   if (!errors.email && !errors.password) {
-      //     dispatch(buttonAction.setBtnSpiner(true));
-      //     try {
-      //       const response = await apiClient.get('/auth/login', credentials);
-      
-      //       if (response.status === 200) {
-      //         const cookies = document.cookie.split(';');
-      //         let accessToken = '';
-      //        console.log(credentials);
-      //         // Find the access_token cookie
-      //         for (let i = 0; i < cookies.length; i++) {
-      //           const cookie = cookies[i].trim();
-      //           if (cookie.startsWith('access_token=')) {
-      //             accessToken = cookie.substring('access_token='.length, cookie.length);
-      //             break;
-      //           }
-      //         }
-      
-      //         // Save the access token and navigate to the home page
-      //         if (accessToken) {
-      //           saveUserData(accessToken);
-      //           navigate('/');
-      //         }
-      //       }
-      //     } catch (err) {
-      //       setErrors(prevErrors => {
-      //         return { ...prevErrors, errNotify: err.response };
-      //       });
-      //       console.log(err);
-      //     } finally {
-      //       dispatch(buttonAction.setBtnSpiner(false));
-      //     }
-      //   }
-      // };
-      const handleSubmit = (e) => {
-        e.preventDefault();
-    
-        const url = `http://164.160.187.141:3344/`;
-    
-        const requestOptions = {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(credentials),
-        };
-    
-        fetch(url, requestOptions)
-          .then((response) => {
-            // Handle the response as needed
-          })
-          .catch((error) => {
-            // Handle any errors
-          });
-      };
-    
-    
-     return<div className="flex items-center w-full h-screen p-4 lg:justify-center">
-     <div
+  const saveUserData = (accessToken) => {
+    apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+    localStorage.setItem('token', accessToken);
+    dispatch(userAction.setToken(accessToken));
+    dispatch(userAction.setIsAuthenticated(true));
+  };
+
+  function getCookieValue(cookieName) {
+    const cookieString = document.cookie;
+    const cookies = cookieString.split('; ');
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].split('=');
+      if (cookie[0] === cookieName) {
+        return cookie[1];
+      }
+    }
+
+    return null;
+  }
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    console.log('cre', credentials);
+
+    try{
+      var response = await apiClient.post('api/v1/auth/login',credentials)
+
+      console.log('cr', credentials);
+      console.log('res', response);
+
+      if (response.status === 200) {
+        const accessToken = getCookieValue('access_token');
+        saveUserData(accessToken);
+        console.log('Access Token:', accessToken);
+      } else {
+        console.log('Error response');
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+     return(
+      <div className="flex items-center w-full h-screen p-4 lg:justify-center">
+        <div
        className="flex flex-col overflow-hnameden  bg-violet  rounded-md shadow-lg max md:flex-row md:flex-1 lg:flex-1"
-     >
+        >
        
        <div className=" pt-3 text-white h-screen bg-gradient-to-b from-ad to-ab md:w-100 md:flex-shrink-0 md:flex md:flex-col md:items-center md:justify-evenly">
          
@@ -180,7 +127,7 @@ const LoginPage = () =>{
              <button
                type="submit"
                className="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-gradient-to-b from-ad to-ab md:w-90 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
-               onClick={loginHandler}>
+               onClick={handleLogin}>
                Sign in
              </button>
            </div>
@@ -189,5 +136,6 @@ const LoginPage = () =>{
        </div>
      </div>
    </div>
+     )
 }
 export default LoginPage
