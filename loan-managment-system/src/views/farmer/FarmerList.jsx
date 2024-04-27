@@ -1,110 +1,77 @@
-import ReactDOM from 'react-dom';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'antd';
-const { createRoot } = ReactDOM;
-
-//const {  Table  } = antd;
+import apiClient from '../../url/index';
 
 const FarmerList = () => {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await apiClient.get('credit-score/farmers');
+        setData(response.data.data);
+        console.log('fetched',response.data.data);
+      } catch (error) {
+        console.log('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const columns = [
     {
       title: 'Name',
-      dataIndex: 'name',
-      filters: [
-        {
-          text: 'Joe',
-          value: 'Joe',
-        },
-        {
-          text: 'Category 1',
-          value: 'Category 1',
-          children: [
-            {
-              text: 'Yellow',
-              value: 'Yellow',
-            },
-            {
-              text: 'Pink',
-              value: 'Pink',
-            },
-          ],
-        },
-        {
-          text: 'Category 2',
-          value: 'Category 2',
-          children: [
-            {
-              text: 'Green',
-              value: 'Green',
-            },
-            {
-              text: 'Black',
-              value: 'Black',
-            },
-          ],
-        },
-      ],
-      filterMode: 'tree',
-      filterSearch: true,
-      onFilter: (value, record) => record.name.includes(value),
-      width: '30%',
+      dataIndex: 'FullName',
+      render: (text) => <a>{text}</a>,
     },
     {
       title: 'Age',
-      dataIndex: 'age',
+      dataIndex: 'Age',
       sorter: (a, b) => a.age - b.age,
     },
     {
+      title: 'Phone Number',
+      dataIndex: 'No',
+    },
+    {
       title: 'Address',
-      dataIndex: 'address',
-      filters: [
-        {
-          text: 'London',
-          value: 'London',
-        },
-        {
-          text: 'New York',
-          value: 'New York',
-        },
-      ],
-      onFilter: (value, record) => record.address.startsWith(value),
-      filterSearch: true,
-      width: '40%',
+      dataIndex: 'Address',
     },
+    // {
+    //   title: 'Years On Platform',
+    //   dataIndex: 'Address',
+    // },
+    // {
+    //   title: 'Voc Id',
+    //   dataIndex: 'Address',
+    // },
+    {
+      title: 'Land Size',
+      dataIndex: 'Land_size',
+    },
+    {
+      title: 'Main Crop Grown',
+      dataIndex: 'Address',
+    },
+    {
+      title: 'Loan Status',
+      dataIndex: 'Loan_Status',
+    },
+    
   ];
-  const data = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sydney No. 1 Lake Park',
-    },
-    {
-      key: '4',
-      name: 'Jim Red',
-      age: 32,
-      address: 'London No. 2 Lake Park',
-    },
-  ];
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
-  };
-  return(
-    <div className=' w-95 mx-6 mt-6'>
-    <Table columns={columns} dataSource={data} onChange={onChange} />;
 
+  const onChange = (pagination, filters, sorter) => {
+    console.log('Pagination:', pagination);
+    console.log('Filters:', filters);
+    console.log('Sorter:', sorter);
+  };
+
+  return (
+    <div className='w-95 mx-6 mt-6'>
+      <Table columns={columns} dataSource={data} onChange={onChange} />
     </div>
-  )
-}
-export default FarmerList
+  );
+};
+
+export default FarmerList;

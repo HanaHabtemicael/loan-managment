@@ -47,7 +47,7 @@ const LoginPage = () => {
   }
   
   const saveUserData = (data) =>{
-      apiClient.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+        apiClient.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
         localStorage.setItem("token", data.token);
         dispatch(userAction.setToken(data.token))
         dispatch(userAction.setIsAuthenticated(true))
@@ -55,10 +55,10 @@ const LoginPage = () => {
   }
   const loginHandler = async (e) => {
     e.preventDefault();
-    setErrors(validate(cridentials))
+    setErrors(validate(credentials))
     if(!errors.email && !errors.password){
     try {
-      const response = await axios.post('http://164.160.187.141:3344/api/v1/auth/login', credentials);
+      const response = await apiClient.post('auth/login', credentials);
       const token = response.data.token;
       localStorage.setItem('token', token);
       Cookies.set('token', token); 
