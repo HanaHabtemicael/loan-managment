@@ -16,7 +16,7 @@ const AppContainer = () => {
         <SideBar />
       </div>
 
-      <div className='flex bg-violet flex-col w-full'>
+      <div className='flex bg-wh flex-col w-full'>
         <Header />
 
         {isLoading && <Spiner />}

@@ -101,7 +101,7 @@ const FarmerList = () => {
     console.log('params', pagination, filters, sorter, extra);
   };
   return(
-    <div className='mx-auto w-40'>
+    <div className=' w-95 mx-6 mt-6'>
     <Table columns={columns} dataSource={data} onChange={onChange} />;
 
     </div>

@@ -60,10 +60,10 @@ const Header = () => {
     setShow(true)
   }
   return <Fragment>
-    <div className={classes.headerNav + ' m-3 bg-white rounded-md d-flex mx-auto flex-row p-2'}>
+    <div className={classes.headerNav + ' m-6 bg-white rounded-md d-flex mx-auto flex-row p-2'}>
       <div className='flex flex-row width-80  '>
-        <i class="fa-solid fa-magnifying-glass p-3"></i>
-        <input type="text" placeholder="Search for farmer..." class=" focus:outline-none" />
+        <i className="fa-solid fa-magnifying-glass p-3"></i>
+        <input type="text" placeholder="Search for farmer..." className=" focus:outline-none" />
       </div>
 
 

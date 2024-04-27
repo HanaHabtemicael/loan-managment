@@ -11,7 +11,9 @@ export default {
         'ab':'#4A176D',
         'ad':'#00B0AD',
         'violet':'#e9d5ff',
-        'whiteback':'#A5A3AE4D'
+        'whiteback':'#A5A3AE4D',
+        'wh':'#f4f4f5'
+        
       },
     },
   },
