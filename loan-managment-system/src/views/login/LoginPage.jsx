@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { userAction } from '../../store/slices/UserSlice';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -8,65 +8,69 @@ import classNamees from './LoginPage.module.css';
 import hibretlogo from '../../assets/hibretlogo.png';
 import emoje from '../../assets/emoji.png';
 import Cookies from 'js-cookie';
+import {buttonAction} from '../../store/slices/ButtonSpinerSlice'
+
 
 const LoginPage = () => {
-  const [credentials, setCredentials] = useState({ email: '', password: '' });
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
+  const isLoading = useSelector((state) => state.btn.isLoading);
+  const [credentials, setCredentials] = useState({ email: '', password: '' })
+  const [errors, setErrors] = useState({ email: '', password: '', errNotify: '' })
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const changeHandler = (e) => {
-    const { name, value } = e.target;
-    setCredentials((prevValues) => {
-      return { ...prevValues, [name]: value };
-    });
-  };
-
-  const saveUserData = (accessToken) => {
-    apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-    localStorage.setItem('token', accessToken);
-    //Cookies.set('access_token', accessToken); // Save access token as a cookie
-    dispatch(userAction.setToken(accessToken));
-    dispatch(userAction.setIsAuthenticated(true));
-  };
-
-  function getCookieValue(cookieName) {
-    const cookieString = document.cookie;
-    const cookies = cookieString.split('; ');
-
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].split('=');
-      if (cookie[0] === cookieName) {
-        return cookie[1];
-      }
+    const { name, value } = e.target
+    setCredentials(prevValues => {
+      return { ...prevValues, [name]: value }
+    })
+    if (e.target.value) {
+      setErrors(prevErrors => {
+        return { ...prevErrors, [name]: '' }
+      })
     }
-
-    return null;
   }
-
-  const handleLogin = async (e) => {
+  const validate = (values) => {
+    const regexExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/gi;
+    const errorValues = {}
+    if (!values.email.trim()) {
+      errorValues.email = 'email is required'
+    }
+    else if (!regexExp.test(values.email)) {
+      errorValues.email = 'invalid email address'
+    }
+    if (!values.password) {
+      errorValues.password = 'password is required'
+    }
+    else if (values.length > 15) {
+      errorValues.password = 'password must not be greater than 15 characters'
+    }
+    return errorValues
+  }
+  
+  const saveUserData = (data) =>{
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+        localStorage.setItem("token", data.token);
+        dispatch(userAction.setToken(data.token))
+        dispatch(userAction.setIsAuthenticated(true))
+        console.log('sa data',data)
+  }
+  const loginHandler = async (e) => {
     e.preventDefault();
-    console.log('cre', credentials);
-
+    setErrors(validate(cridentials))
+    if(!errors.email && !errors.password){
     try {
-      var response = await apiClient.post('api/v1/auth/login', credentials)
-
-
-console.log("res",response)
-      if (response.status === 200) {
-       // const accessToken = getCookieValue('access_token');
-      //  console.log(accessToken)
-        
-       // saveUserData(accessToken);
-      //  console.log('Access Token:', accessToken);
-        navigate('/home')
-      } else {
-        console.log('Error response');
-      }
-    } catch (err) {
-      console.log(err);
+      const response = await axios.post('http://164.160.187.141:3344/api/v1/auth/login', credentials);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      Cookies.set('token', token); 
+      console.log(response);
+      saveUserData(response.data)
+      navigate('/home');
+    } catch (error) {
+      // Handle errors
+      console.error('Error occurred:', error);
     }
   };
-
+}
   return (
     <div className="flex items-center w-full h-screen p-4 lg:justify-center">
       <div
@@ -86,7 +90,7 @@ console.log("res",response)
           <div className="flex flex-row w-full items-baseline h-14">
             <h3 className="text-2xl font-semibold text-gray-700 flex items-start h-full">Welcome</h3>
           </div>
-          <form className="flex flex-col space-y-5"> 
+          <form className="flex flex-col space-y-5">
             <div className="flex flex-col space-y-1">
               <label className="text-sm  text-gray-500 flex items-start">Sign in to your account</label>
               <label className="text-sm pt-3 text-gray-500 flex items-start">email</label>
@@ -129,7 +133,7 @@ console.log("res",response)
               <button
                 type="submit"
                 className="w-full px-4 py-2 text-lg font-semibold text-white transition-colors duration-300 bg-gradient-to-b from-ad to-ab md:w-90 rounded-md shadow hover:bg-blue-600 focus:outline-none focus:ring-blue-200 focus:ring-4"
-                onClick={handleLogin}>
+                onClick={loginHandler}>
                 Sign in
               </button>
             </div>

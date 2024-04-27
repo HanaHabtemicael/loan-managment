@@ -1,9 +1,8 @@
 .farmerDetailNav{
-    width: 45%;
-    max-width: 45%;
+    width: 95%;
+    max-width:60%;
     max-height: 44%;
     min-height: 38%;
     box-shadow: 1px 1px 1px 2px gainsboro;
-    background-color: aquamarine;
 
 }
