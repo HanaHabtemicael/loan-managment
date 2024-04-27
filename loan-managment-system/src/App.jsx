@@ -13,23 +13,22 @@ function App() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   
-  useEffect(() => {
-    const checkCookie = () => {
-      console.log("chkin ck");
-      const cookieValue = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('access_token='))
-        ?.split('=')[1]; 
-      console.log("gf-irr------------",cookieValue)
-      if (!cookieValue) {
-        navigate('/login'); 
-      }
-    };
+  useEffect(()=>{
+    const token = localStorage.getItem('token')
 
-    checkCookie();
-  }, []);
-  
+    if(token){
+      dispatch(userAction.setToken(token))
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+      //fetchUserData(token)
+    }
+   
+    else{
+      navigate('/farmer')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  },[])
   return (<Router />);
+
 }
 
 export default App;

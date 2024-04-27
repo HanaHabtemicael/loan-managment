@@ -60,7 +60,7 @@ const Header = () =>{
        setShow(true)
   } 
   return <Fragment>
-  <div className={classes.headerNav+' mt-3 bg-white rounded-md d-flex mx-auto flex-row p-2'}>
+  <div className={classes.headerNav+' m-3 bg-white rounded-md d-flex mx-auto flex-row p-2'}>
        <h1>Farmer Information</h1>
       {
          <div className='ms-auto me-3 flex flex-row gap-7'>

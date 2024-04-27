@@ -6,9 +6,7 @@ import hibretlogo from '../assets/hibretlogo.png';
 const SideBar = () => {
   const [isOpen, setIsOpen] = useState(true);
 
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+  
 
   return (
     <div className={`bg-gradient-to-b from-ad to-ab h-screen w-1/5 flex flex-shrink flex-col ${isOpen ? '' : 'hidden'}`}>
