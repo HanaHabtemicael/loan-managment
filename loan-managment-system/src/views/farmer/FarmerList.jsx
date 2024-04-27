@@ -101,10 +101,10 @@ const FarmerList = () => {
     console.log('params', pagination, filters, sorter, extra);
   };
   return(
-    <>
+    <div className='mx-auto w-40'>
     <Table columns={columns} dataSource={data} onChange={onChange} />;
 
-    </>
+    </div>
   )
 }
 export default FarmerList
