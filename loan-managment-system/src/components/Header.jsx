@@ -1,17 +1,13 @@
 import {Fragment,useState,useEffect} from 'react'
-//import button from 'react-bootstrap/button';
-//import Dropdown from 'react-bootstrap/Dropdown';
-// import profileImage from '../assetes/eyilachew.jpg'
-//import ChangePassword from './ChangePassword';
-//import EditName from './EditName';
+
 import { useNavigate } from 'react-router-dom';
-//import Offcanvas from 'react-bootstrap/Offcanvas';
 import {useDispatch,useSelector} from 'react-redux'
-// import { notificationAction } from '../store/slices/NotificationSlice';
-// import { isLoadingAction } from '../store/slices/spinerSlice';
+
 import { userAction } from '../store/slices/UserSlice';
 // import apiClient from '../url/index'
-import classes from './Header.module.css'
+import classes from './Header.module.css';
+import pp from '../assets/pp.jpeg';
+
 
 const Header = () =>{
   const [show,setShow] = useState(false)
@@ -54,28 +50,29 @@ const Header = () =>{
   const openPasswordChange = () =>{
     setShowChangePassword(true)
   }
-  // const openNotification = () =>{
-  //   setShow(true)
-  // } 
+  
   const handleClose = ()=>{
     setShow(false)
     setShowChangePassword(false)
     setShowEditName(false)
   }
+  const openNotification = () =>{
+       setShow(true)
+  } 
   return <Fragment>
-  <div className={classes.headerNav+' mt-3  rounded-md d-flex  px-3 px-lg-5 '}>
-       <div>
-        <span className={classes.yellowText+' fw-bold fs-4'}>HEBRET</span>
-        <span className={classes.greenText+' fw-bold fs-4'}>bank</span>
-       </div>
+  <div className={classes.headerNav+' mt-3 bg-white rounded-md d-flex mx-auto flex-row p-2'}>
+       <h1>Farmer Information</h1>
       {
-    //      <div className='ms-auto me-3'>
-    //    <button className={classes.notificationBtn} onClick={openNotification}>
-    //    <div className='text-white position-relative'><i className="fa-regular fa-bell fs-2"></i>
-    //    <span className={classes.bage+' rounded-circle px-1 small'}>12</span>
-    //    </div>      
-    // </button>       
-    //    </div>
+         <div className='ms-auto me-3 flex flex-row gap-7'>
+       <button className={classes.notificationBtn} >
+       <i className="fa-regular fa-bell fs-2" onClick={openNotification}></i>
+       </button> 
+    
+
+        <img src={pp} alt={'pp'} className={`${classes.profileImg} `} />
+        </div>
+
+       
       }
       <div className=''>
       {/* <Dropdown>
