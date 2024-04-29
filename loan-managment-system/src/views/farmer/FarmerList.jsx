@@ -1,16 +1,20 @@
-import React, { useEffect, useState,useRef } from 'react';
-import { Table, Input, Button, Space } from 'antd';
+import React, { useEffect, useState, useRef } from 'react';
+import { Table, Input, Button,Tooltip,Select,Space,Dropdown,Menu} from 'antd';
 import { FilterOutlined } from '@ant-design/icons';
-import { Link,useNavigate} from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import apiClient from '../../url/index';
+import { SearchOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 
+const pageSizeOptions = ['1', '2', '50']; 
 const FarmerList = () => {
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
   const navigate = useNavigate();
-  const searchInput = useRef(null); 
-
+  const searchInput = useRef(null);
+  const [pageSize, setPageSize] = useState(10); 
+  const [statusFilter, setStatusFilter] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +39,9 @@ const FarmerList = () => {
           onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{ width: 188, marginBottom: 8, display: 'block' }}
+          ref={searchInput} // Add this line to assign the ref
         />
+
         <Space>
           <Button
             type="primary"
@@ -57,7 +63,7 @@ const FarmerList = () => {
       record[dataIndex]
         ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
         : '',
-      onFilterDropdownOpenChange: (visible) => {
+    onFilterDropdownOpenChange: (visible) => {
       if (visible) {
         setTimeout(() => searchInput.select(), 100);
       }
@@ -133,12 +139,79 @@ const FarmerList = () => {
     console.log('Filters:', filters);
     console.log('Sorter:', sorter);
   };
+  const pageSizeOptions = ['10', '20', '50']; // Options for the dropdown
+
+  const handlePageSizeChange = (value) => {
+    console.log('Selected page size:', value);
+    setPageSize(value);
+    // Update the table with the new page size
+    // ...
+  };
+
+  const handleStatusFilterChange = (value) => {
+    console.log('Selected status filter:', value);
+    setStatusFilter(value);
+    // Apply the status filter to the table
+    // ...
+  };
+
+  const pageSizeSelector = (
+    <Select defaultValue={pageSize.toString()} onChange={handlePageSizeChange} style={{ width: 80 }}>
+      {pageSizeOptions.map((option) => (
+        <Option key={option} value={option}>
+          {option} rows
+        </Option>
+      ))}
+    </Select>
+  );
+
+  const statusFilterSelector = (
+    <Select defaultValue={statusFilter} onChange={handleStatusFilterChange} style={{ width: 120 }}>
+      <Option value="">All Status</Option>
+      <Option value="active">Active</Option>
+      <Option value="inactive">Inactive</Option>
+    </Select>
+  );
+  const handlePageSizeSelect = (pageSize) => {
+    console.log('Selected page size:', pageSize);
+    // Update the table with the new page size
+    // ...
+  };
+
+  const pageSizeMenu = (
+    <Menu onClick={({ key }) => handlePageSizeSelect(key)}>
+      {pageSizeOptions.map((option) => (
+        <Menu.Item key={option}>{option} rows</Menu.Item>
+      ))}
+    </Menu>
+  );
 
   return (
     <div className="w-95 mx-6 mt-6">
       <Table
         columns={columns}
-        title={() => 'Header'}
+        
+        title={() => (
+          <div>
+          <Tooltip placement="topRight" title="Search">
+          <Dropdown overlay={pageSizeMenu} trigger={['click']}>
+      <a onClick={(e) => e.preventDefault()}>
+        <Space>
+          10 rows
+          <DownOutlined />
+        </Space>
+      </a>
+    </Dropdown>
+            </Tooltip>
+            <Tooltip placement="topLeft" title={`Rows per Page: ${pageSizeSelector}`}>
+        <input type="text" placeholder="Search for farmer..." className=" focus:outline-none" />
+
+            </Tooltip>
+            <Tooltip placement="topRight" title={`Status Filter: ${statusFilterSelector}`}>
+            </Tooltip>
+            </div>
+        )}  
+          
         dataSource={data}
         onChange={onChange}
         onRow={(record) => ({
@@ -147,7 +220,7 @@ const FarmerList = () => {
           },
         })}
         rowKey={(record) => record.id}
-      
+
       />
     </div>
   );

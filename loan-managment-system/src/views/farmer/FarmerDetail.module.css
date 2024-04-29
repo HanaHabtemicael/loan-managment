@@ -3,6 +3,8 @@
     max-width:60%;
     max-height: 44%;
     min-height: 38%;
-    box-shadow: 1px 1px 1px 2px gainsboro;
 
 }
+.customtabs .ant-tabs-nav::before {
+    border-bottom: none;
+  }
