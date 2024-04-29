@@ -1,10 +1,13 @@
 a.active{
-    background-color: #062539;
+    background-color: white;
     text-decoration: none;
-    color: white; 
+    color: black; 
     font-family: 'Mulish', sans-serif;
     font-weight: bold;
     font-size: large;
+    width: 100px;
+    
+
 
 
 }
@@ -14,4 +17,5 @@ a.active{
    font-family: 'Mulish', sans-serif;
    font-weight: bold;
    font-size: large;
+   width: 100px;
 }

@@ -12,7 +12,10 @@ export default {
         'ad':'#00B0AD',
         'violet':'#e9d5ff',
         'whiteback':'#A5A3AE4D',
-        'wh':'#f4f4f5'
+        'wh':'#f4f4f5',
+        'gray':'#d1d5db',
+        'gren':'00B0AD',
+        'bgc':'F8F7FA'
         
       },
     },
